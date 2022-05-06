@@ -8,3 +8,5 @@ junit.xml
 .eslintcache
 tsnode-cache
 .task
+
+!packages/core/test/node_modules

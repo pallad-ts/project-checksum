@@ -1,0 +1,38 @@
+{
+  "name": "@pallad/project-checksum-package-dependency",
+  "version": "0.1.0",
+  "description": "Package dependency for @pallad/project-checksum",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "directories": {
+    "test": "test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "JEST_JUNIT_OUTPUT_DIR=../../test_results/package-dependency ../../node_modules/.bin/pallad-scripts test",
+    "compile": "../../node_modules/.bin/pallad-scripts compile",
+    "lint": "../../node_modules/.bin/pallad-scripts lint",
+    "prepublishOnly": "npm run compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pallad-ts/project-checksum.git",
+    "directory": "packages/package-dependency"
+  },
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pallad-ts/project-checksum/issues"
+  },
+  "files": [
+    "compiled",
+    "docs",
+    "assets"
+  ],
+  "dependencies": {
+    "get-installed-path": "^4.0.8",
+    "@pallad/project-checksum-core": "*"
+  }
+}

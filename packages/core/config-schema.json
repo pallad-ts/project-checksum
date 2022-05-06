@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "algorithm": {
+      "type": "string",
+      "default": "sha256",
+      "enum": [
+        "md5",
+        "sha256"
+      ]
+    },
+    "paths": {
+      "type": "array",
+      "contains": {
+        "type": "string"
+      }
+    },
+    "external": {
+      "type": "array",
+      "contains": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "loader": {
+                "type": "string"
+              },
+              "options": {
+                "type": "object"
+              }
+            },
+            "required": [
+              "loader"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

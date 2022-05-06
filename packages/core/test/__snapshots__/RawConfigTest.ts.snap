@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RawConfig loading config from yml file 1`] = `
+Object {
+  "algorithm": "sha256",
+  "paths": Array [
+    "src",
+  ],
+}
+`;
+
+exports[`RawConfig validation invalid algorithm 1`] = `
+ViolationsList {
+  "violations": Array [
+    Object {
+      "message": "is not one of enum values: md5,sha256",
+      "path": Array [
+        "algorithm",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`RawConfig validation invalid algorithm type 1`] = `
+ViolationsList {
+  "violations": Array [
+    Object {
+      "message": "is not of a type(s) string",
+      "path": Array [
+        "algorithm",
+      ],
+    },
+    Object {
+      "message": "is not one of enum values: md5,sha256",
+      "path": Array [
+        "algorithm",
+      ],
+    },
+  ],
+}
+`;

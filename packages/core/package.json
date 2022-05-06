@@ -1,0 +1,44 @@
+{
+  "name": "@pallad/project-checksum-core",
+  "version": "0.1.0",
+  "description": "",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "directories": {
+    "test": "test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pallad-ts/project-checksum.git",
+    "directory": "packages/core"
+  },
+  "scripts": {
+    "test": "JEST_JUNIT_OUTPUT_DIR=../../test_results/core ../../node_modules/.bin/pallad-scripts test",
+    "compile": "../../node_modules/.bin/pallad-scripts compile",
+    "lint": "../../node_modules/.bin/pallad-scripts lint",
+    "prepublishOnly": "npm run compile"
+  },
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pallad-ts/project-checksum/issues"
+  },
+  "files": [
+    "compiled",
+    "docs",
+    "assets"
+  ],
+  "homepage": "https://github.com/pallad-ts/project-checksum#readme",
+  "dependencies": {
+    "@pallad/filesystem-iterator": "^1.0.4",
+    "alpha-errors": "^0.4.0",
+    "alpha-validator": "^0.6.1",
+    "cosmiconfig": "^7.0.1",
+    "jsonschema": "^1.4.0",
+    "micromatch": "^4.0.5",
+    "monet": "^0.9.3"
+  }
+}
