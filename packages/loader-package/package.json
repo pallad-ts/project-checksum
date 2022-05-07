@@ -1,5 +1,5 @@
 {
-  "name": "@pallad/project-checksum-package-dependency",
+  "name": "@pallad/project-checksum-loader-package",
   "version": "0.1.0",
   "description": "Package dependency for @pallad/project-checksum",
   "main": "compiled/index.js",
