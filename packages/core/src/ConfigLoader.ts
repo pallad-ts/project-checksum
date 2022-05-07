@@ -1,12 +1,16 @@
-import {Validation, ValidatorError, ViolationsList} from "alpha-validator";
+import {SchemaValidation, Validation, ValidatorError, ViolationsList} from "alpha-validator";
 import {ERRORS} from "./errors";
-import {RawConfig} from "./RawConfig";
-import {Validator} from "jsonschema";
+import {Config} from "./Config";
 import {cosmiconfig} from "cosmiconfig";
 import * as path from "path";
+import {byJsonSchema} from "alpha-validator-bridge-jsonschema";
+import {LoadersLoader} from "./LoadersLoader";
+import {Project} from "./Project";
+import {Dependency, FilesPatternsDependency} from "./Dependency";
 
-const validator = new Validator();
-const schema = require('../config-schema.json');
+const validation = SchemaValidation.toValidationFunction(
+	'none', byJsonSchema<Config>(require('../config-schema.json'))
+);
 
 export class ConfigLoader {
 	private explorer = cosmiconfig('@pallad/project-checksum', {
@@ -27,45 +31,102 @@ export class ConfigLoader {
 				}, [] as string[])
 	});
 
-	validate(data: any): Validation<ViolationsList, RawConfig> {
-		const result = validator.validate(data, schema);
-
-		if (result.valid) {
-			return Validation.Success(result.instance);
-		}
-
-		const list = ViolationsList.create();
-		for (const error of result.errors) {
-			list.addViolation(error.message, error.path.map(String));
-		}
-		return Validation.Fail(list);
+	constructor(private loadersLoader: LoadersLoader) {
 	}
 
-	async loadFile(filePath: string, rootDir?: string) {
-		const result = await this.explorer.load(filePath);
+	async validate(data: any): Promise<Validation<ViolationsList, Config>> {
+		return (await validation(data))
+			.chain(config => {
+				const hasPaths = Array.isArray(config.paths) && config.paths.length > 0;
+				const external = Array.isArray(config.external) && config.external.length > 0;
+				if (!hasPaths && !external) {
+					return Validation.Fail(
+						ViolationsList.create()
+							.addViolation('Project configuration needs at least one path or external defined'),
+					);
+				}
+				return Validation.Success(config);
+			});
+	}
 
+	async loadProjectFromFile(file: ConfigLoader.ConfigFile, context?: ConfigLoader.Context): Promise<Project> {
+		const fullFilePath = path.join(file.rootDir, file.filePath);
+
+		if (context && context.loadedFiles.includes(fullFilePath)) {
+			throw ERRORS.CIRCULAR_DEPENDENCY.format(
+				context.loadedFiles.concat([fullFilePath]).join(' > ')
+			);
+		}
+
+		const result = await this.explorer.load(fullFilePath);
 		if (!result) {
-			throw ERRORS.NO_CONFIG_FILE_FOUND.format(filePath);
+			throw ERRORS.NO_CONFIG_FILE_FOUND.format(file.filePath, file.rootDir);
 		}
-		const directory = rootDir ?? path.dirname(filePath);
-		return this.validateAndEnchantResult(result.config, directory);
+
+		const config = await this.validateConfigOrFail(result.config);
+		const finalContext: ConfigLoader.Context = context ?? {loadedFiles: [fullFilePath]};
+		return this.createProjectFromConfig(config, file, finalContext);
 	}
 
-	private validateAndEnchantResult(config: any, directory: string) {
-		const validationResult = this.validate(config);
+	private async createProjectFromConfig(config: Config, file: ConfigLoader.ConfigFile, context: ConfigLoader.Context) {
+		const dependencies = [] as Dependency[];
+		if (config.paths && config.paths.length > 0) {
+			dependencies.push(new FilesPatternsDependency(config.paths, file.rootDir));
+		}
+
+		if (config.external) {
+			for (const external of config.external) {
+				const {loader: loaderName, options: loaderOptions} = Config.External.toLoaderConfig(external);
+				const loader = this.loadersLoader.getLoader(loaderName);
+
+				const loadingResult = await loader.load({
+					configLoader: this,
+					loadedFiles: context.loadedFiles
+				}, loaderOptions);
+
+				if (loadingResult) {
+					dependencies.push(
+						...(Array.isArray(loadingResult) ? loadingResult : [loadingResult])
+					);
+				}
+			}
+		}
+
+		return new Project({
+			algorithm: config.algorithm,
+			dependencies,
+			rootDirectory: file.rootDir
+		});
+	}
+
+	private async validateConfigOrFail(config: unknown) {
+		const validationResult = await this.validate(config);
 		if (validationResult.isFail()) {
 			throw new ValidatorError(validationResult.fail(), 'Invalid config');
 		}
-
-		return {...validationResult.success(), directory};
+		return validationResult.success();
 	}
 
-	async loadDirectory(directory: string): Promise<RawConfig.Enchanted> {
+	async loadProjectFromDirectory(directory: string): Promise<Project> {
 		const result = await this.explorer.search(directory);
 		if (!result) {
 			throw ERRORS.NO_CONFIG_FOUND.format(directory);
 		}
 
-		return this.validateAndEnchantResult(result.config, directory);
+		return this.loadProjectFromFile({
+			filePath: path.relative(directory, result.filepath),
+			rootDir: directory
+		});
+	}
+}
+
+export namespace ConfigLoader {
+	export interface Context {
+		loadedFiles: string[];
+	}
+
+	export interface ConfigFile {
+		filePath: string;
+		rootDir: string;
 	}
 }

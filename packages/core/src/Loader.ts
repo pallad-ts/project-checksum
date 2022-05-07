@@ -6,11 +6,7 @@ export interface Loader<TOptions> {
 }
 
 export namespace Loader {
-	export function getLoader(name: string) {
-		
-	}
-
-	export interface Context {
+	export interface Context extends ConfigLoader.Context {
 		configLoader: ConfigLoader;
 	}
 

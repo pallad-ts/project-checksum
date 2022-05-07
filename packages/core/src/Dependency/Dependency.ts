@@ -5,6 +5,6 @@ export interface Dependency {
 }
 
 export namespace Dependency {
-	export type ContentGenerator = Generator<Content, void, never> | AsyncGenerator<Content, void, never>;
-	export type Content = Buffer | [string, Encoding];
+	export type ContentGenerator = Generator<Content, void, undefined> | AsyncGenerator<Content, void, undefined> | Promise<Content> | Content;
+	export type Content = Buffer | readonly [string, Encoding];
 }

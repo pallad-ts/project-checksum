@@ -35,9 +35,9 @@
   "dependencies": {
     "@pallad/filesystem-iterator": "^1.0.4",
     "alpha-errors": "^0.4.0",
-    "alpha-validator": "^0.6.1",
+    "alpha-validator": "^0.6.2",
+    "alpha-validator-bridge-jsonschema": "^0.1.0",
     "cosmiconfig": "^7.0.1",
-    "jsonschema": "^1.4.0",
     "micromatch": "^4.0.5",
     "monet": "^0.9.3"
   }

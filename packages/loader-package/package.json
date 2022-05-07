@@ -33,6 +33,9 @@
   ],
   "dependencies": {
     "get-installed-path": "^4.0.8",
-    "@pallad/project-checksum-core": "*"
+    "@pallad/project-checksum-core": "*",
+    "alpha-validator": "^0.6.2",
+    "alpha-validator-bridge-jsonschema": "^0.1.0",
+    "jsonschema": "^1.4.0"
   }
 }

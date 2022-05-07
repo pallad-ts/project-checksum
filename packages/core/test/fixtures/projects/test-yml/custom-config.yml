@@ -1,0 +1,4 @@
+algorithm: md5
+paths:
+  - "src/**/*.html"
+  - "src/**/*.txt"

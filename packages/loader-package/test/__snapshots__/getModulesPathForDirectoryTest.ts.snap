@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getModulesPathForDirectory walks up to root directory 1`] = `
+Array [
+  "/root/projects/test/alpha/beta/node_modules",
+  "/root/projects/test/alpha/node_modules",
+  "/root/projects/test/node_modules",
+  "/root/projects/node_modules",
+  "/root/node_modules",
+  "/node_modules",
+]
+`;

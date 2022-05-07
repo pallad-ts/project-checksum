@@ -5,4 +5,4 @@ export * from './ConfigLoader';
 export * from './createHashForAlgorithm';
 export * from './errors';
 export * from './Loader';
-export * from './RawConfig';
+export * from './Config';
