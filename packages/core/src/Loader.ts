@@ -8,6 +8,7 @@ export interface Loader<TOptions> {
 export namespace Loader {
 	export interface Context extends ConfigLoader.Context {
 		configLoader: ConfigLoader;
+		directory: string;
 	}
 
 	export type Result = Dependency | Dependency[];

@@ -9,4 +9,4 @@ junit.xml
 tsnode-cache
 .task
 
-!packages/core/test/node_modules
+!packages/loader-package/test/node_modules

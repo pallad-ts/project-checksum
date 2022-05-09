@@ -29,12 +29,20 @@
                 "type": "string"
               },
               "options": {
-                "type": "object"
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
               }
             },
             "required": [
               "loader"
-            ]
+            ],
+            "additionalProperties": false
           }
         ]
       }

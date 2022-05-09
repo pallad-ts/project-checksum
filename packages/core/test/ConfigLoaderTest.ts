@@ -96,7 +96,6 @@ describe('ConfigLoader', () => {
 				expect(ERRORS.CIRCULAR_DEPENDENCY.is(result.left()))
 					.toBeTruthy();
 
-
 				expect(result.left().message)
 					.toMatchInlineSnapshot(`"Circular dependency detected. Projects path: a/file.yml > b.file.yml > a/file.yml"`);
 			})

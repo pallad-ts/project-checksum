@@ -81,7 +81,8 @@ export class ConfigLoader {
 
 				const loadingResult = await loader.load({
 					configLoader: this,
-					loadedFiles: context.loadedFiles
+					loadedFiles: context.loadedFiles,
+					directory: file.rootDir
 				}, loaderOptions);
 
 				if (loadingResult) {
@@ -123,6 +124,7 @@ export class ConfigLoader {
 export namespace ConfigLoader {
 	export interface Context {
 		loadedFiles: string[];
+
 	}
 
 	export interface ConfigFile {

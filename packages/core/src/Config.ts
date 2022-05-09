@@ -7,12 +7,12 @@ export interface Config {
 }
 
 export namespace Config {
-	export type External = string | { loader: string, options: unknown };
+	export type External = string | External.LoaderConfig;
 
 	export namespace External {
 		export interface LoaderConfig {
 			loader: string,
-			options: unknown
+			options?: unknown
 		}
 
 		export function toLoaderConfig(data: External): External.LoaderConfig {
