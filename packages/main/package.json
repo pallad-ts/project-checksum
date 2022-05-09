@@ -1,7 +1,7 @@
 {
-  "name": "@pallad/project-checksum-loader-package",
+  "name": "@pallad/project-checksum",
   "version": "0.0.9",
-  "description": "Package dependency for @pallad/project-checksum",
+  "description": "Computes project checksum to detect changes",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
   "directories": {
@@ -11,7 +11,6 @@
     "access": "public"
   },
   "scripts": {
-    "test": "JEST_JUNIT_OUTPUT_DIR=../../test_results/loader-package ../../node_modules/.bin/pallad-scripts test",
     "compile": "../../node_modules/.bin/pallad-scripts compile",
     "lint": "../../node_modules/.bin/pallad-scripts lint",
     "prepublishOnly": "npm run compile"
@@ -33,10 +32,7 @@
   ],
   "dependencies": {
     "@pallad/project-checksum-core": "*",
-    "alpha-validator": "^0.6.2",
-    "alpha-validator-bridge-jsonschema": "^0.1.0",
-    "get-installed-path": "^4.0.8",
-    "monet": "^0.9.3",
-    "tslib": "^2.4.0"
+    "@pallad/project-checksum-cli": "*",
+    "@pallad/project-checksum-loader-package": "*"
   }
 }
