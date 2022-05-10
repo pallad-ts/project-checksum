@@ -29,7 +29,8 @@
   "files": [
     "compiled",
     "docs",
-    "assets"
+    "assets",
+    "options-schema.json"
   ],
   "dependencies": {
     "@pallad/project-checksum-core": "^0.1.1",
