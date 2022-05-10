@@ -1,6 +1,6 @@
 {
   "name": "@pallad/project-checksum",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Computes project checksum to detect changes",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -33,6 +33,6 @@
   "dependencies": {
     "@pallad/project-checksum-cli": "^0.1.1",
     "@pallad/project-checksum-core": "^0.1.1",
-    "@pallad/project-checksum-loader-package": "^0.1.1"
+    "@pallad/project-checksum-loader-package": "^0.1.2"
   }
 }
