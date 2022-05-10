@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import Command, {flags} from "@oclif/command";
-import {ChecksumError, ConfigLoader, ERRORS, LoadersLoader} from "@pallad/project-checksum-core";
+import {ChecksumError, ConfigLoader, LoadersLoader} from "@pallad/project-checksum-core";
 import * as path from "path";
 import {ValidatorError} from "alpha-validator";
+import * as fs from 'fs/promises';
 
 class ProjectChecksum extends Command {
 	static description = "Computes project checksum"
@@ -31,7 +32,7 @@ class ProjectChecksum extends Command {
 			new LoadersLoader()
 		);
 
-		const directory = this.getDirectory(args.projectDirectory);
+		const directory = await this.getDirectory(args.projectDirectory);
 		const configFile = flags.config;
 
 		try {
@@ -62,7 +63,7 @@ class ProjectChecksum extends Command {
 		}
 	}
 
-	private getDirectory(projectDirectoryArgument: string) {
+	private async getDirectory(projectDirectoryArgument: string) {
 		if (!projectDirectoryArgument) {
 			return process.cwd();
 		}
@@ -70,7 +71,7 @@ class ProjectChecksum extends Command {
 		if (path.isAbsolute(projectDirectoryArgument)) {
 			return projectDirectoryArgument;
 		}
-		return projectDirectoryArgument;
+		return fs.realpath(projectDirectoryArgument);
 	}
 }
 
