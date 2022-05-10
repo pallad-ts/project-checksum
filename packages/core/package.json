@@ -35,6 +35,7 @@
   "homepage": "https://github.com/pallad-ts/project-checksum#readme",
   "dependencies": {
     "@pallad/filesystem-iterator": "^1.0.4",
+    "ajv": "^8.11.0",
     "alpha-errors": "^0.4.0",
     "alpha-validator": "^0.6.2",
     "alpha-validator-bridge-jsonschema": "^0.1.0",
