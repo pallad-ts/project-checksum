@@ -1,6 +1,6 @@
 {
   "name": "@pallad/project-checksum-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
