@@ -3,16 +3,18 @@ import * as fs from 'fs/promises';
 import {ERRORS} from "./errors";
 import * as YAML from 'yaml';
 import {ValidatorError} from "alpha-validator";
+import {State} from "./types";
+import {Maybe} from "monet";
 
 const schema = require('../state-schema.json');
 
 const validator = byJsonSchema<Record<string, string>>(schema);
 
 export namespace StateFile {
-	export async function load(file: string) {
+	export async function load(file: string): Promise<Maybe<State>> {
 		const isFileExist = await fs.access(file).then(() => true, () => false);
 		if (!isFileExist) {
-			throw ERRORS.STATE_FILE_NOT_FOUND.format(file);
+			return Maybe.None();
 		}
 		const content = await fs.readFile(file, 'utf-8');
 
@@ -23,7 +25,7 @@ export namespace StateFile {
 			throw new ValidatorError(state.fail(), 'Invalid state file structure');
 		}
 
-		return state.success();
+		return Maybe.Some(state.success());
 	}
 
 	export function validate(data: any) {
@@ -42,6 +44,4 @@ export namespace StateFile {
 		const content = YAML.stringify(data);
 		await fs.writeFile(file, content);
 	}
-
-	export type State = Map<string, string>;
 }

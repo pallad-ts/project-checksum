@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "required": [
+    "projects"
+  ],
+  "properties": {
+    "stateFile": {
+      "type": "string",
+      "default": "CHECKSUMS.yml"
+    },
+    "projects": {
+      "type": "object",
+      "patternProperties": {
+        "^.*$": {
+          "type": "object",
+          "properties": {
+            "directory": {
+              "type": "string"
+            },
+            "configFile": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "directory"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "bin": {
+    "project-checksum-state": "./bin/run"
+  },
   "scripts": {
     "test": "JEST_JUNIT_OUTPUT_DIR=../../test_results/state-file ../../node_modules/.bin/pallad-scripts test",
     "compile": "../../node_modules/.bin/pallad-scripts compile",
@@ -29,7 +32,9 @@
   "files": [
     "compiled",
     "docs",
-    "assets"
+    "assets",
+    "state-schema.json",
+    "config-schema.json"
   ],
   "dependencies": {
     "@pallad/project-checksum-core": "^0.1.1",
@@ -37,6 +42,7 @@
     "alpha-errors": "^0.4.0",
     "alpha-validator": "^0.6.2",
     "alpha-validator-bridge-jsonschema": "^0.1.0",
+    "cosmiconfig": "^7.0.1",
     "monet": "^0.9.3",
     "yaml": "^2.0.1"
   }
