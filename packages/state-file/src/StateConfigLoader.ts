@@ -66,7 +66,13 @@ export class StateConfigLoader {
 	}
 
 	validate(data: any) {
-		return validator(data);
+		return validator(data)
+			.map(x => {
+				return {
+					...x,
+					stateFile: x.stateFile || 'CHECKSUMS.yml'
+				};
+			});
 	}
 }
 
