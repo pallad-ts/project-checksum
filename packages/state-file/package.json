@@ -1,0 +1,43 @@
+{
+  "name": "@pallad/project-checksum-state-file",
+  "version": "0.0.9",
+  "description": "Allows to store checksums in file",
+  "main": "compiled/index.js",
+  "types": "compiled/index.d.ts",
+  "directories": {
+    "test": "test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "JEST_JUNIT_OUTPUT_DIR=../../test_results/state-file ../../node_modules/.bin/pallad-scripts test",
+    "compile": "../../node_modules/.bin/pallad-scripts compile",
+    "lint": "../../node_modules/.bin/pallad-scripts lint",
+    "prepublishOnly": "npm run compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pallad-ts/project-checksum.git",
+    "directory": "packages/state-file"
+  },
+  "author": "Łukasz Kużyński <lukasz.kuzynski@gmail.com> (http://wookieb.pl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pallad-ts/project-checksum/issues"
+  },
+  "files": [
+    "compiled",
+    "docs",
+    "assets"
+  ],
+  "dependencies": {
+    "@pallad/project-checksum-core": "^0.1.1",
+    "ajv": "^8.11.0",
+    "alpha-errors": "^0.4.0",
+    "alpha-validator": "^0.6.2",
+    "alpha-validator-bridge-jsonschema": "^0.1.0",
+    "monet": "^0.9.3",
+    "yaml": "^2.0.1"
+  }
+}

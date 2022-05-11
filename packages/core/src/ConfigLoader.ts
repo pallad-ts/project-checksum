@@ -28,7 +28,7 @@ export class ConfigLoader {
 						`${name}.yml`,
 						`${name}.js`,
 					])
-				}, [] as string[])
+				}, [] as string[]),
 	});
 
 	constructor(private loadersLoader: LoadersLoader) {

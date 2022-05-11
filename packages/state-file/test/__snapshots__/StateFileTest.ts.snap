@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StateFile loading file has invalid structure 1`] = `[ValidatorError: Invalid state file structure]`;
+
+exports[`StateFile loading success 1`] = `
+Map {
+  "base" => "somechecksum",
+  "another" => "somechecksumforanother",
+}
+`;
+
+exports[`StateFile validation invalid data 1`] = `
+ViolationsList {
+  "violations": Array [
+    Object {
+      "message": "must be string",
+      "path": Array [
+        "this",
+      ],
+    },
+  ],
+}
+`;
