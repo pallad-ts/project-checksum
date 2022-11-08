@@ -1,6 +1,6 @@
 {
   "name": "@pallad/project-checksum-loader-package",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Package dependency for @pallad/project-checksum",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
@@ -33,12 +33,12 @@
     "options-schema.json"
   ],
   "dependencies": {
-    "@pallad/project-checksum-core": "^0.1.2",
+    "@pallad/project-checksum-core": "^0.2.0",
+    "@sweet-monads/either": "^3",
     "ajv": "^8.11.0",
     "alpha-validator": "^0.7.0",
     "alpha-validator-bridge-jsonschema": "^0.2.1",
     "get-installed-path": "^4.0.8",
-    "tslib": "^2.4.0",
-    "@sweet-monads/either": "^3"
+    "tslib": "^2.4.0"
   }
 }
