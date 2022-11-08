@@ -1,8 +1,9 @@
 import {StateFile} from "@src/StateFile";
 import * as path from "path";
-import {Either} from "monet";
 import {ERRORS} from "@src/errors";
 import * as fs from 'fs';
+import {left, right} from "@sweet-monads/either";
+import {just} from "@sweet-monads/maybe";
 
 describe('StateFile', () => {
 	describe('validation', () => {
@@ -11,7 +12,7 @@ describe('StateFile', () => {
 				this: 'isfine'
 			});
 
-			expect(result.success())
+			expect(result.unwrap())
 				.toEqual(
 					new Map([['this', 'isfine']])
 				);
@@ -22,34 +23,33 @@ describe('StateFile', () => {
 				this: {is: 'notok'}
 			});
 
-			expect(result.fail())
+			expect(result.value)
 				.toMatchSnapshot();
 		});
 	});
 
 	describe('loading', () => {
 		it('success', async () => {
-			const data = await StateFile.load(path.join(__dirname, './fixtures/state-file.yml'));
+			const data = await StateFile.load(path.join(__dirname, './fixtures/state-file.yml'))
 
-			expect(data)
+			expect(data.value)
 				.toBeInstanceOf(Map);
-			expect(data)
+			expect(data.value)
 				.toMatchSnapshot();
 		});
 
 		it('file does not exist', async () => {
-			const result = await Either.fromPromise(StateFile.load('non-existing-file.yml'));
+			const result = await StateFile.load('non-existing-file.yml');
 
-			expect(ERRORS.STATE_FILE_NOT_FOUND.is(result.left()))
+			expect(result.isNone())
 				.toBeTruthy();
 		});
 
 		it('file has invalid structure', async () => {
-			const data = await Either.fromPromise(
-				StateFile.load(path.join(__dirname, './fixtures/invalid-state-file.yml'))
-			);
+			const data = await StateFile.load(path.join(__dirname, './fixtures/invalid-state-file.yml'))
+				.then(right, left);
 
-			expect(data.left())
+			expect(data.value)
 				.toMatchSnapshot();
 		})
 	});
@@ -71,7 +71,7 @@ describe('StateFile', () => {
 			const loaded = await StateFile.load(STATE_FILE_PATH);
 
 			expect(loaded)
-				.toEqual(result);
+				.toEqual(just(result));
 		})
 	});
 });

@@ -37,11 +37,11 @@
     "@pallad/filesystem-iterator": "^1.0.4",
     "ajv": "^8.11.0",
     "alpha-errors": "^0.4.0",
-    "alpha-validator": "^0.6.2",
-    "alpha-validator-bridge-jsonschema": "^0.1.0",
+    "alpha-validator": "^0.7.0",
+    "alpha-validator-bridge-jsonschema": "^0.2",
+    "@sweet-monads/either": "^3",
     "cosmiconfig": "^7.0.1",
     "micromatch": "^4.0.5",
-    "monet": "^0.9.3",
     "tslib": "^2.4.0"
   }
 }

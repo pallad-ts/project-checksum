@@ -40,10 +40,10 @@
     "@pallad/project-checksum-core": "^0.1.2",
     "ajv": "^8.11.0",
     "alpha-errors": "^0.4.0",
-    "alpha-validator": "^0.6.2",
-    "alpha-validator-bridge-jsonschema": "^0.1.0",
+    "alpha-validator": "^0.7.0",
+    "alpha-validator-bridge-jsonschema": "^0.2",
     "cosmiconfig": "^7.0.1",
-    "monet": "^0.9.3",
-    "yaml": "^2.0.1"
+    "yaml": "^2.0.1",
+    "@sweet-monads/maybe": "^3"
   }
 }

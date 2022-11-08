@@ -1,6 +1,15 @@
 import {LoadersLoader} from "@src/LoadersLoader";
-import {Either} from "monet";
 import {ERRORS} from "@src/errors";
+import {Either, left, right} from "@sweet-monads/either";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function fromTry<L, R>(fn: () => R): Either<L, R> {
+	try {
+		return right(fn());
+	} catch (e) {
+		return left(e as L);
+	}
+}
 
 describe('LoadersLoader', () => {
 	let loader: LoadersLoader;
@@ -10,11 +19,11 @@ describe('LoadersLoader', () => {
 	});
 
 	it('fails to load loader that is not installed', () => {
-		const result = Either.fromTry(() => {
+		const result = fromTry(() => {
 			loader.getLoader('not-installed');
 		});
 
-		expect(ERRORS.NO_LOADER_FOUND.is(result.left()))
+		expect(ERRORS.NO_LOADER_FOUND.is(result.value))
 			.toBeTruthy();
 	});
 });

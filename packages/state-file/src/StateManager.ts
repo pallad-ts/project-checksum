@@ -32,7 +32,7 @@ export class StateManager {
 			if (state.isNone()) {
 				throw ERRORS.STATE_FILE_NOT_FOUND.format(this.stateFile);
 			}
-			return filterState(state.some(), projectNames);
+			return filterState(state.unwrap(), projectNames);
 		} else if (strategy === 'only-compute') {
 			if (projectNames) {
 				return this.computeProjectsChecksums(projectNames);
@@ -47,7 +47,7 @@ export class StateManager {
 			}
 			return this.stateGenerator.computeState();
 		}
-		return filterState(state.some(), projectNames);
+		return filterState(state.unwrap(), projectNames);
 	}
 }
 

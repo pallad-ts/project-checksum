@@ -2,10 +2,10 @@ import {Config} from "@src/Config";
 import * as path from "path";
 import {ERRORS} from "@src/errors";
 import {ConfigLoader} from "@src/ConfigLoader";
-import {Either} from "monet";
 import {LoadersLoader} from "@src/LoadersLoader";
 import * as sinon from 'sinon';
 import {Project} from "@src/Project";
+import {left, right} from "@sweet-monads/either";
 
 describe('ConfigLoader', () => {
 	const DATA: Config = {
@@ -33,7 +33,7 @@ describe('ConfigLoader', () => {
 					...DATA,
 					algorithm: 'test'
 				});
-				expect(result.fail())
+				expect(result.value)
 					.toMatchSnapshot()
 			});
 
@@ -43,7 +43,7 @@ describe('ConfigLoader', () => {
 					...DATA,
 					algorithm: 4
 				});
-				expect(result.fail())
+				expect(result.value)
 					.toMatchSnapshot();
 			});
 
@@ -54,7 +54,7 @@ describe('ConfigLoader', () => {
 					paths: [],
 					external: []
 				});
-				expect(result.fail())
+				expect(result.value)
 					.toMatchSnapshot();
 			})
 		})
@@ -74,29 +74,27 @@ describe('ConfigLoader', () => {
 
 		it('fails if no config was found', async () => {
 			const directory = path.resolve(__dirname, './fixtures/projects/no-config');
-			const config = await Either.fromPromise(configLoader.loadProjectFromDirectory(directory));
-			expect(ERRORS.NO_CONFIG_FOUND.is(config.left()))
+			const config = await configLoader.loadProjectFromDirectory(directory).then(right, left);
+			expect(ERRORS.NO_CONFIG_FOUND.is(config.value))
 				.toBeTruthy();
 		});
 
 		describe('fails', () => {
 			it('when circular dependency detected', async () => {
-				const result = await Either.fromPromise(
-					configLoader.loadProjectFromFile({
-						rootDir: 'a',
-						filePath: 'file.yml'
-					}, {
-						loadedFiles: [
-							'a/file.yml',
-							'b.file.yml'
-						]
-					})
-				);
+				const result = await configLoader.loadProjectFromFile({
+					rootDir: 'a',
+					filePath: 'file.yml'
+				}, {
+					loadedFiles: [
+						'a/file.yml',
+						'b.file.yml'
+					]
+				}).then(right, left);
 
-				expect(ERRORS.CIRCULAR_DEPENDENCY.is(result.left()))
+				expect(ERRORS.CIRCULAR_DEPENDENCY.is(result.value))
 					.toBeTruthy();
 
-				expect(result.left().message)
+				expect(result.value.message)
 					.toMatchInlineSnapshot(`"Circular dependency detected. Projects path: a/file.yml > b.file.yml > a/file.yml"`);
 			})
 		})

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import BaseCommand, {flags} from "@oclif/command";
+import {Command as BaseCommand, Flags} from "@oclif/core";
 import {StateConfigLoader} from "./StateConfigLoader";
 import {ChecksumError, ConfigLoader, LoadersLoader} from "@pallad/project-checksum-core";
 import {LoadingStrategy, State} from "./types";
@@ -9,19 +9,19 @@ export class Command extends BaseCommand {
 	static description = "Computes project checksum"
 
 	static flags = {
-		config: flags.string({
+		config: Flags.string({
 			description: 'Path to configuration file',
 			char: 'c'
 		}),
-		onlyValues: flags.boolean({
+		onlyValues: Flags.boolean({
 			char: 'v',
 			description: 'Display only values',
 		}),
-		noStateFile: flags.boolean({
+		noStateFile: Flags.boolean({
 			char: 'n',
 			description: 'Do not use state file'
 		}),
-		onlyStateFile: flags.boolean({
+		onlyStateFile: Flags.boolean({
 			char: 'o',
 			description: 'Use only state file'
 		})
@@ -60,7 +60,7 @@ export class Command extends BaseCommand {
 	}
 
 	private async internal() {
-		const {flags, argv} = this.parse(Command);
+		const {flags, argv} = await this.parse(Command);
 		const manager = await this.getManager(flags.config);
 
 		if (argv.length === 0 && !flags.onlyStateFile && !flags.noStateFile) {

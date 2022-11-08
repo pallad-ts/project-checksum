@@ -35,10 +35,10 @@
   "dependencies": {
     "@pallad/project-checksum-core": "^0.1.2",
     "ajv": "^8.11.0",
-    "alpha-validator": "^0.6.2",
-    "alpha-validator-bridge-jsonschema": "^0.1.0",
+    "alpha-validator": "^0.7.0",
+    "alpha-validator-bridge-jsonschema": "^0.2.1",
     "get-installed-path": "^4.0.8",
-    "monet": "^0.9.3",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "@sweet-monads/either": "^3"
   }
 }

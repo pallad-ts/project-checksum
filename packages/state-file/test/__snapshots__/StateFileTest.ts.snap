@@ -11,10 +11,10 @@ Map {
 
 exports[`StateFile validation invalid data 1`] = `
 ViolationsList {
-  "violations": Array [
-    Object {
+  "violations": [
+    {
       "message": "must be string",
-      "path": Array [
+      "path": [
         "this",
       ],
     },

@@ -43,7 +43,7 @@ export class StateConfigLoader {
 		const validationResult = this.validate(result.config);
 
 		const generator = new StateGenerator(
-			new Map(Object.entries(validationResult.success().projects)
+			new Map(Object.entries(validationResult.unwrap().projects)
 				.map(([projectName, config]) => {
 					config.directory = path.resolve(fileRef.directory, config.directory);
 					return [projectName, config];
@@ -52,7 +52,7 @@ export class StateConfigLoader {
 			this.configLoader
 		);
 		return new StateManager(
-			path.join(fileRef.directory, validationResult.success().stateFile),
+			path.join(fileRef.directory, validationResult.unwrap().stateFile),
 			generator
 		);
 	}

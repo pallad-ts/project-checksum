@@ -1,4 +1,4 @@
-import {SchemaValidation, Validation, ValidatorError, ViolationsList} from "alpha-validator";
+import {SchemaValidation, ValidatorError, ViolationsList} from "alpha-validator";
 import {ERRORS} from "./errors";
 import {Config} from "./Config";
 import {cosmiconfig} from "cosmiconfig";
@@ -7,6 +7,7 @@ import {byJsonSchema} from "alpha-validator-bridge-jsonschema";
 import {LoadersLoader} from "./LoadersLoader";
 import {Project} from "./Project";
 import {Dependency, FilesPatternsDependency} from "./Dependency";
+import {Either, left, right} from "@sweet-monads/either";
 
 const validation = SchemaValidation.toValidationFunction(
 	'none', byJsonSchema<Config>(require('../config-schema.json'))
@@ -34,18 +35,18 @@ export class ConfigLoader {
 	constructor(private loadersLoader: LoadersLoader) {
 	}
 
-	async validate(data: any): Promise<Validation<ViolationsList, Config>> {
+	async validate(data: any): Promise<Either<ViolationsList, Config>> {
 		return (await validation(data))
 			.chain(config => {
 				const hasPaths = Array.isArray(config.paths) && config.paths.length > 0;
 				const external = Array.isArray(config.external) && config.external.length > 0;
 				if (!hasPaths && !external) {
-					return Validation.Fail(
+					return left(
 						ViolationsList.create()
 							.addViolation('Project configuration needs at least one path or external defined'),
 					);
 				}
-				return Validation.Success(config);
+				return right(config);
 			});
 	}
 
@@ -102,10 +103,10 @@ export class ConfigLoader {
 
 	private async validateConfigOrFail(config: unknown) {
 		const validationResult = await this.validate(config);
-		if (validationResult.isFail()) {
-			throw new ValidatorError(validationResult.fail(), 'Invalid config');
+		if (validationResult.isLeft()) {
+			throw new ValidatorError(validationResult.value, 'Invalid config');
 		}
-		return validationResult.success();
+		return validationResult.value;
 	}
 
 	async loadProjectFromDirectory(directory: string): Promise<Project> {

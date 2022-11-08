@@ -1,9 +1,9 @@
 import {Loader as BaseLoader, ProjectDependency} from '@pallad/project-checksum-core';
-import {SchemaValidation, Validation, ValidatorError, ViolationsList} from "alpha-validator";
+import {SchemaValidation, ValidatorError, ViolationsList} from "alpha-validator";
 import {byJsonSchema} from "alpha-validator-bridge-jsonschema";
 import {getInstalledPath} from "get-installed-path";
 import {getModulesPathsForDirectory} from "./getModulesPathForDirectory";
-import {Either} from "monet";
+import {Either, left, right} from "@sweet-monads/either";
 
 const validator = SchemaValidation.toValidationFunction(
 	'none', byJsonSchema<Loader.Options.FromUser>(require('../options-schema.json'))
@@ -12,29 +12,27 @@ const validator = SchemaValidation.toValidationFunction(
 export class Loader implements BaseLoader<Loader.Options> {
 	async load(context: BaseLoader.Context, options: Loader.Options.FromUser) {
 		const validationResult = await this.validateOptions(options);
-		if (validationResult.isFail()) {
-			throw new ValidatorError(validationResult.fail(), 'Invalid options for @pallad/project-checksum-loader-package');
+		if (validationResult.isLeft()) {
+			throw new ValidatorError(validationResult.value, 'Invalid options for @pallad/project-checksum-loader-package');
 		}
 
-		const packageName = validationResult.success().name;
-		const packageLocation = await Either.fromPromise(
-			getInstalledPath(packageName, {
-				paths: getModulesPathsForDirectory(context.directory)
-			})
-		);
+		const packageName = validationResult.value.name;
+		const packageLocation = await getInstalledPath(packageName, {
+			paths: getModulesPathsForDirectory(context.directory)
+		}).then(right, left);
 
 		if (packageLocation.isLeft()) {
-			throw packageLocation.left();
+			throw packageLocation.value;
 		}
 
 		return new ProjectDependency(
 			await context.configLoader.loadProjectFromDirectory(
-				packageLocation.right()
+				packageLocation.value
 			)
 		)
 	}
 
-	async validateOptions(options: Loader.Options.FromUser): Promise<Validation<ViolationsList, Loader.Options>> {
+	async validateOptions(options: Loader.Options.FromUser): Promise<Either<ViolationsList, Loader.Options>> {
 		return (await validator(options))
 			.map(x => {
 				return typeof x === 'string' ? {name: x} : x;

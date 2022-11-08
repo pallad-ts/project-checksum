@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import Command, {flags} from "@oclif/command";
+import {Command, Flags} from "@oclif/core";
 import {ChecksumError, ConfigLoader, LoadersLoader} from "@pallad/project-checksum-core";
 import * as path from "path";
 import {ValidatorError} from "alpha-validator";
@@ -9,7 +9,7 @@ class ProjectChecksum extends Command {
 	static description = "Computes project checksum"
 
 	static flags = {
-		config: flags.string({
+		config: Flags.string({
 			description: 'Path to configuration file',
 			char: 'c'
 		})
@@ -26,7 +26,7 @@ class ProjectChecksum extends Command {
 	static strict = true;
 
 	async run() {
-		const {args, flags} = this.parse(ProjectChecksum);
+		const {args, flags} = await this.parse(ProjectChecksum);
 
 		const configLoader = new ConfigLoader(
 			new LoadersLoader()

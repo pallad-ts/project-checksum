@@ -1,10 +1,9 @@
 import {byJsonSchema} from "alpha-validator-bridge-jsonschema";
 import * as fs from 'fs/promises';
-import {ERRORS} from "./errors";
 import * as YAML from 'yaml';
 import {ValidatorError} from "alpha-validator";
 import {State} from "./types";
-import {Maybe} from "monet";
+import {just, Maybe, none} from "@sweet-monads/maybe";
 
 const schema = require('../state-schema.json');
 
@@ -14,18 +13,18 @@ export namespace StateFile {
 	export async function load(file: string): Promise<Maybe<State>> {
 		const isFileExist = await fs.access(file).then(() => true, () => false);
 		if (!isFileExist) {
-			return Maybe.None();
+			return none();
 		}
 		const content = await fs.readFile(file, 'utf-8');
 
 		const data = YAML.parse(content);
 		const state = validate(data);
 
-		if (state.isFail()) {
-			throw new ValidatorError(state.fail(), 'Invalid state file structure');
+		if (state.isLeft()) {
+			throw new ValidatorError(state.value, 'Invalid state file structure');
 		}
 
-		return Maybe.Some(state.success());
+		return just(state.value);
 	}
 
 	export function validate(data: any) {

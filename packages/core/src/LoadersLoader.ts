@@ -1,6 +1,15 @@
-import {Either} from "monet";
 import {ERRORS} from "./errors";
 import {Loader} from "./Loader";
+import {Either, left, right} from "@sweet-monads/either";
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+function fromTry<L, R>(fn: () => R): Either<L, R> {
+	try {
+		return right(fn());
+	} catch (e) {
+		return left(e as L);
+	}
+}
 
 export class LoadersLoader {
 	private loaders = new Map<string, Loader<unknown>>();
@@ -34,10 +43,7 @@ export class LoadersLoader {
 	}
 
 	private tryLoadModule(name: string) {
-		return Either.fromTry(() => require(name))
-			.cata(
-				() => undefined,
-				x => x
-			);
+		return fromTry(() => require(name))
+			.mapLeft(() => undefined).value;
 	}
 }
