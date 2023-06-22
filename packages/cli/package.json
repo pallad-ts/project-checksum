@@ -1,7 +1,7 @@
 {
   "name": "@pallad/project-checksum-cli",
   "description": "CLI for @pallad/project-checksum",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",
   "directories": {
